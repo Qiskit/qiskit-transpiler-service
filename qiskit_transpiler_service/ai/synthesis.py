@@ -14,6 +14,7 @@ import logging
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from multiprocessing import cpu_count
+from abc import ABC, abstractmethod
 
 from qiskit.circuit.exceptions import CircuitError
 from qiskit.converters import circuit_to_dag
@@ -33,7 +34,7 @@ logger = logging.getLogger(__name__)
 MAX_THREADS = os.environ.get("AI_TRANSPILER_MAX_THREADS", int(cpu_count() / 2))
 
 
-class AISynthesis(TransformationPass):
+class AISynthesis(TransformationPass, ABC):
     """AI Synthesis base class"""
 
     def __init__(
@@ -65,7 +66,7 @@ class AISynthesis(TransformationPass):
                 originals.append(orig)
         except CircuitError:
             logger.warning(
-                f"Error getting  synth input from node. Skipping ai transpilation."
+                "Error getting  synth input from node. Skipping ai transpilation."
             )
             return [], []
 
@@ -94,7 +95,7 @@ class AISynthesis(TransformationPass):
         return outputs, nodes
 
     def run(self, dag: DAGCircuit):
-        logger.info(f"Requesting synthesis to the service")
+        logger.info("Requesting synthesis to the service")
 
         future_list = []
 
@@ -111,6 +112,18 @@ class AISynthesis(TransformationPass):
                     if output:
                         dag.substitute_node_with_dag(node, circuit_to_dag(output))
         return dag
+
+    @abstractmethod
+    def _is_original_a_better_circuit(self, synth, original):
+        pass
+
+    @abstractmethod
+    def _get_synth_input_and_original(self, node):
+        pass
+
+    @abstractmethod
+    def _get_nodes(self, dag):
+        pass
 
 
 class AICliffordSynthesis(AISynthesis):

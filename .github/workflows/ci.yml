@@ -19,6 +19,7 @@ jobs:
 
       - name: Run lint
         run: |
+          pylint --errors-only ./qiskit_transpiler_service
           python -m black --check .
   
   run-tests:

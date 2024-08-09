@@ -1,0 +1,16 @@
+[MAIN]
+jobs=0
+recursive=True
+
+[CLASSES]
+check-protected-access-in-special-methods=True
+
+[DESIGN]
+max-bool-expr=3
+max-branches=8
+
+[SIMILARITIES]
+ignore-comments=False
+ignore-docstrings=False
+ignore-imports=False
+ignore-signatures=False
