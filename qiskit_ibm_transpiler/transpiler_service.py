@@ -117,7 +117,7 @@ class TranspilerService:
             ai=self.ai,
             qiskit_transpile_options=self.qiskit_transpile_options,
             ai_layout_mode=self.ai_layout_mode,
-            use_fractional_fates=self.use_fractional_gates
+            use_fractional_gates=self.use_fractional_gates
         )
         if transpile_result is None:
             logger.warning("Qiskit IBM Transpiler couldn't transpile the circuit(s)")
