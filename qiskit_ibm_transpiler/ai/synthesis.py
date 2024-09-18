@@ -77,7 +77,7 @@ class AISynthesis(TransformationPass):
                 originals.append(orig)
         except CircuitError:
             logger.warning(
-                f"Error getting  synth input from node. Skipping ai transpilation."
+                "Error getting  synth input from node. Skipping ai transpilation."
             )
             return [], []
 
@@ -92,7 +92,8 @@ class AISynthesis(TransformationPass):
             )
         except TranspilerError as e:
             logger.warning(
-                f"{self.synth_service.__class__.__name__} couldn't synthesize the circuit: {e}"
+                f"{self.synth_service.__class__.__name__} couldn't synthesize"
+                f" the circuit: {e}"
             )
             synths = [None] * len(synth_inputs)
 
@@ -109,7 +110,7 @@ class AISynthesis(TransformationPass):
         return outputs, nodes
 
     def run(self, dag: DAGCircuit):
-        logger.info(f"Requesting synthesis to the service")
+        logger.info("Requesting synthesis to the service")
 
         future_list = []
 
@@ -139,7 +140,7 @@ class AICliffordSynthesis(AISynthesis):
     :type replace_only_if_better: bool, optional
     :param max_threads: Set the number of requests to send in parallel.
     :type max_threads: int, optional
-    """
+    """  # noqa: E501
 
     def __init__(
         self,
@@ -185,7 +186,7 @@ class AILinearFunctionSynthesis(AISynthesis):
     :type replace_only_if_better: bool, optional
     :param max_threads: Set the number of requests to send in parallel.
     :type max_threads: int, optional
-    """
+    """  # noqa: E501
 
     def __init__(
         self,
@@ -227,7 +228,7 @@ class AIPermutationSynthesis(AISynthesis):
     :type replace_only_if_better: bool, optional
     :param max_threads: Set the number of requests to send in parallel.
     :type max_threads: int, optional
-    """
+    """  # noqa: E501
 
     def __init__(
         self,

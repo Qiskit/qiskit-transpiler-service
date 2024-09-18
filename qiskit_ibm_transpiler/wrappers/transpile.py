@@ -11,14 +11,13 @@
 # that they have been altered from the originals.
 
 import logging
-from typing import Dict, List, Union, Literal
+from typing import Dict, List, Literal, Union
 
-import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister, qasm2, qasm3
 from qiskit.circuit import QuantumCircuit, QuantumRegister, Qubit, library
-from qiskit.transpiler.basepasses import TransformationPass
 from qiskit.qasm2 import QASM2ExportError, QASM2ParseError
 from qiskit.transpiler import TranspileLayout
+from qiskit.transpiler.basepasses import TransformationPass
 from qiskit.transpiler.layout import Layout
 
 from qiskit_ibm_transpiler.wrappers import QiskitTranspilerService
@@ -32,7 +31,8 @@ OptimizationOptions = Literal["n_cnots", "n_gates", "cnot_layers", "layers", "no
 
 
 class TranspileAPI(QiskitTranspilerService):
-    """A helper class that covers some basic funcionality from the Qiskit Transpiler API"""
+    """A helper class that covers some basic funcionality
+    from the Qiskit IBM Transpiler API"""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -90,7 +90,7 @@ class TranspileAPI(QiskitTranspilerService):
         for res, orig_circ in zip(transpile_resp, circuits):
             try:
                 transpiled_circuits.append(_get_circuit_from_result(res, orig_circ))
-            except Exception as ex:
+            except Exception:
                 logger.error("Error transforming the result to a QuantumCircuit object")
                 raise
 
@@ -145,7 +145,8 @@ def _get_circuit_from_result(transpile_resp, orig_circuit):
 
 
 def _create_initial_layout(initial, n_used_qubits):
-    """Create initial layout using the initial index layout and the number of active qubits."""
+    """Create initial layout using the initial index layout
+    and the number of active qubits."""
     total_qubits = len(initial)
     q_total = n_used_qubits
     a_total = total_qubits - q_total
@@ -160,7 +161,8 @@ def _create_initial_layout(initial, n_used_qubits):
 
 
 def _create_input_qubit_mapping(qubits_used, total_qubits):
-    """Create input qubit mapping with the number of active qubits and the total number of qubits."""
+    """Create input qubit mapping with the number of active qubits
+    and the total number of qubits."""
     input_qubit_mapping = {
         Qubit(QuantumRegister(qubits_used, "q"), q): q for q in range(qubits_used)
     }

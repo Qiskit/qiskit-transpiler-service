@@ -18,7 +18,7 @@ from qiskit_ibm_runtime.fake_provider import FakeCairoV2
 
 @pytest.fixture(autouse=True)
 def env_set(monkeypatch, request):
-    if not "disable_monkeypatch" in request.keywords:
+    if "disable_monkeypatch" not in request.keywords:
         monkeypatch.setenv(
             "QISKIT_IBM_TRANSPILER_PERMUTATIONS_URL",
             "https://cloud-transpiler-experimental.quantum-computing.ibm.com/permutations",

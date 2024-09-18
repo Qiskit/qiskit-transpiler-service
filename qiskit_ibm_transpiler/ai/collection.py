@@ -10,7 +10,8 @@
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
 
-"""Replace each sequence of Clifford, Linear Function or Permutation gates by a single block of these types of gate."""
+"""Replace each sequence of Clifford, Linear Function or Permutation gates
+by a single block of these types of gate."""
 
 from functools import partial
 
@@ -19,6 +20,7 @@ from qiskit.circuit import Instruction
 from qiskit.circuit.barrier import Barrier
 from qiskit.circuit.library import LinearFunction, PermutationGate
 from qiskit.converters import circuit_to_dag, dag_to_dagdependency, dagdependency_to_dag
+from qiskit.dagcircuit.collect_blocks import BlockCollector
 from qiskit.dagcircuit.dagcircuit import DAGCircuit
 from qiskit.quantum_info.operators import Clifford
 from qiskit.transpiler.basepasses import TransformationPass
@@ -76,8 +78,6 @@ class Flatten(TransformationPass):
 _flatten_cliffords = Flatten(("clifford", "Clifford"))
 _flatten_linearfunctions = Flatten(("linear_function", "Linear_function"))
 _flatten_permutations = Flatten(("permutation", "Permutation"))
-
-from qiskit.dagcircuit.collect_blocks import BlockCollector
 
 
 class GreedyBlockCollector(BlockCollector):
@@ -174,7 +174,7 @@ class RepeatedCollectAndCollapse(CollectAndCollapse):
         collect_from_back=False,
         num_reps=10,
     ):
-        collect_function = lambda dag: GreedyBlockCollector(
+        collect_function = lambda dag: GreedyBlockCollector(  # noqa: E731
             dag, max_block_size
         ).collect_all_matching_blocks(
             filter_fn=block_checker.select,
@@ -202,7 +202,8 @@ class RepeatedCollectAndCollapse(CollectAndCollapse):
             DAGCircuit: the optimized DAG.
         """
 
-        # If the option commutative_analysis is set, construct DAGDependency from the given DAGCircuit.
+        # If the option commutative_analysis is set,
+        # construct DAGDependency from the given DAGCircuit.
         if self.do_commutative_analysis:
             dag = dag_to_dagdependency(dag)
 
@@ -213,7 +214,8 @@ class RepeatedCollectAndCollapse(CollectAndCollapse):
             # call collapse_function to collapse each block in the DAG
             self.collapse_function(dag, blocks)
 
-        # If the option commutative_analysis is set, construct back DAGCircuit from DAGDependency.
+        # If the option commutative_analysis is set,
+        # construct back DAGCircuit from DAGDependency.
         if self.do_commutative_analysis:
             dag = dagdependency_to_dag(dag)
 
@@ -235,7 +237,7 @@ class CollectCliffords(RepeatedCollectAndCollapse):
     :type collect_from_back: bool, optional
     :param num_reps: Specify how many times to repeat the optimization process, defaults to 10.
     :type num_reps: int, optional
-    """
+    """  # noqa: E501
 
     def __init__(
         self,
@@ -275,7 +277,7 @@ class CollectLinearFunctions(RepeatedCollectAndCollapse):
     :type collect_from_back: bool, optional
     :param num_reps: Specify how many times to repeat the optimization process, defaults to 10.
     :type num_reps: int, optional
-    """
+    """  # noqa: E501
 
     def __init__(
         self,
@@ -315,7 +317,7 @@ class CollectPermutations(RepeatedCollectAndCollapse):
     :type collect_from_back: bool, optional
     :param num_reps: Specify how many times to repeat the optimization process, defaults to 10.
     :type num_reps: int, optional
-    """
+    """  # noqa: E501
 
     def __init__(
         self,

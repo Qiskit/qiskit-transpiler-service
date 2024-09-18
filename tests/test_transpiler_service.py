@@ -15,16 +15,16 @@
 import numpy as np
 import pytest
 from qiskit import QuantumCircuit, qasm2, qasm3
-from qiskit.circuit.library import IQP, EfficientSU2, QuantumVolume, ECRGate
 from qiskit.circuit import Gate
+from qiskit.circuit.library import IQP, ECRGate, EfficientSU2, QuantumVolume
 from qiskit.circuit.random import random_circuit
 from qiskit.compiler import transpile
 from qiskit.quantum_info import SparsePauliOp, random_hermitian
 
 from qiskit_ibm_transpiler.transpiler_service import TranspilerService
 from qiskit_ibm_transpiler.wrappers import (
-    _get_circuit_from_result,
     _get_circuit_from_qasm,
+    _get_circuit_from_result,
 )
 
 
@@ -163,7 +163,8 @@ def test_transpile_layout_reconstruction(ai):
         observable.apply_layout(transpiled_circuit.layout)
     except Exception:
         pytest.fail(
-            "This should not fail. Probably something wrong with the reconstructed layout."
+            "This should not fail. "
+            "Probably something wrong with the reconstructed layout."
         )
 
 
@@ -180,9 +181,9 @@ def test_transpile_non_valid_backend():
         transpiler_service.run(circuit)
         pytest.fail("Error expected")
     except Exception as e:
-        assert (
-            str(e)
-            == f'"User doesn\'t have access to the specified backend: {non_valid_backend_name}"'
+        assert str(e) == (
+            "User doesn't have access to the specified backend: "
+            f"{non_valid_backend_name}"
         )
 
 
@@ -275,9 +276,9 @@ def test_transpile_unexisting_url():
         pytest.fail("Error expected")
     except Exception as e:
         assert (
-            "Error: HTTPSConnectionPool(host=\\'invented-domain-qiskit-ibm-transpiler-123.com\\', port=443)"
-            in str(e)
-        )
+            "Error: HTTPSConnectionPool(host=\\'fake-qiskit-ibm-transpiler-123.com"
+            "\\', port=443)"
+        ) in str(e)
 
 
 def test_transpile_malformed_body():
@@ -300,7 +301,12 @@ def test_transpile_malformed_body():
 
 
 def test_transpile_failing_task():
-    open_qasm_circuit = 'OPENQASM 2.0;\ninclude "qelib1.inc";\ngate dcx q0,q1 { cx q0,q1; cx q1,q0; }\nqreg q[3];\ncz q[0],q[2];\nsdg q[1];\ndcx q[2],q[1];\nu3(3.890139082217223,3.447697582994976,1.1583481971959322) q[0];\ncrx(2.3585459177723522) q[1],q[0];\ny q[2];'
+    open_qasm_circuit = (
+        'OPENQASM 2.0;\ninclude "qelib1.inc";\ngate dcx q0,q1 { cx q0,q1; cx q1,q0; }'
+        "\nqreg q[3];\ncz q[0],q[2];\nsdg q[1];\ndcx q[2],q[1];\nu3(3.890139082217223,"
+        "3.447697582994976,1.1583481971959322) q[0];\ncrx(2.3585459177723522) "
+        "q[1],q[0];\ny q[2];"
+    )
     circuit = QuantumCircuit.from_qasm_str(open_qasm_circuit)
     transpiler_service = TranspilerService(
         backend_name="ibm_brisbane",
